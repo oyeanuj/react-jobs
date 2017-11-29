@@ -32,7 +32,7 @@ export default function withJob(config) {
     let id
 
     class ComponentWithJob extends Component {
-      static displayName = `WithJob(${getDisplayName(WrappedComponent)})`;
+      static displayName = `WithJob(${getDisplayName(WrappedComponent)})`
 
       static contextTypes = {
         jobs: PropTypes.shape({
@@ -42,7 +42,9 @@ export default function withJob(config) {
           getRehydrate: PropTypes.func.isRequired,
           removeRehydrate: PropTypes.func.isRequired,
         }),
-      };
+        store: PropTypes.object,
+        intl: PropTypes.object,
+      }
 
       constructor(props, context) {
         super(props, context)
@@ -69,9 +71,10 @@ export default function withJob(config) {
         let result
 
         if (this.context.jobs) {
-          result = env === 'browser'
-            ? this.context.jobs.getRehydrate(id)
-            : this.context.jobs.get(id)
+          result =
+            env === 'browser'
+              ? this.context.jobs.getRehydrate(id)
+              : this.context.jobs.get(id)
         }
 
         this.setState({
@@ -95,25 +98,29 @@ export default function withJob(config) {
         this.unmounted = true
       }
 
-      componentWillReceiveProps(nextProps) {
+      componentWillReceiveProps(nextProps, nextContext) {
+        const { store, intl } = this.context
         if (
           shouldWorkAgain(
             propsWithoutInternal(this.props),
             propsWithoutInternal(nextProps),
             this.getJobState(),
+            { store, intl },
+            { store: nextContext.store, intl: nextContext.intl },
           )
         ) {
           this.resolveWork(nextProps)
         }
       }
 
-      resolveWork = (props) => {
+      resolveWork = props => {
         let workDefinition
 
         this.setState({ completed: false, data: null, error: null })
+        const { store, intl } = this.context
 
         try {
-          workDefinition = work(props)
+          workDefinition = work(props, { store, intl })
         } catch (error) {
           this.setState({ completed: true, error })
           // Ensures asyncBootstrap stops
@@ -123,7 +130,7 @@ export default function withJob(config) {
         if (isPromise(workDefinition)) {
           // Asynchronous result.
           return workDefinition
-            .then((data) => {
+            .then(data => {
               if (this.unmounted) {
                 return undefined
               }
@@ -134,19 +141,16 @@ export default function withJob(config) {
               // Ensures asyncBootstrap continues
               return true
             })
-            .catch((error) => {
+            .catch(error => {
               if (this.unmounted) {
                 return undefined
               }
               if (env === 'browser') {
-                setTimeout(
-                  () => {
-                    if (!this.unmounted) {
-                      this.setState({ completed: true, error })
-                    }
-                  },
-                  16,
-                )
+                setTimeout(() => {
+                  if (!this.unmounted) {
+                    this.setState({ completed: true, error })
+                  }
+                }, 16)
               } else {
                 // node
                 // We will at least log the error so that user isn't completely
@@ -166,21 +170,21 @@ export default function withJob(config) {
 
         // Ensures asyncBootstrap continues
         return true
-      };
+      }
 
       getJobState = () => ({
         completed: this.state.completed,
         error: this.state.error,
         data: this.state.data,
-      });
+      })
 
       render() {
         const { data, error, completed } = this.state
 
         if (error) {
-          return ErrorComponent
-            ? <ErrorComponent {...this.props} error={error} />
-            : null
+          return ErrorComponent ? (
+            <ErrorComponent {...this.props} error={error} />
+          ) : null
         }
         if (!completed) {
           return LoadingComponent ? <LoadingComponent {...this.props} /> : null

@@ -127,8 +127,12 @@ function withJob(config) {
         }
       }, {
         key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(nextProps) {
-          if (shouldWorkAgain((0, _utils.propsWithoutInternal)(this.props), (0, _utils.propsWithoutInternal)(nextProps), this.getJobState())) {
+        value: function componentWillReceiveProps(nextProps, nextContext) {
+          var _context = this.context,
+              store = _context.store,
+              intl = _context.intl;
+
+          if (shouldWorkAgain((0, _utils.propsWithoutInternal)(this.props), (0, _utils.propsWithoutInternal)(nextProps), this.getJobState(), { store: store, intl: intl }, { store: nextContext.store, intl: nextContext.intl })) {
             this.resolveWork(nextProps);
           }
         }
@@ -162,7 +166,9 @@ function withJob(config) {
         get: _propTypes2.default.func.isRequired,
         getRehydrate: _propTypes2.default.func.isRequired,
         removeRehydrate: _propTypes2.default.func.isRequired
-      })
+      }),
+      store: _propTypes2.default.object,
+      intl: _propTypes2.default.object
     };
 
     var _initialiseProps = function _initialiseProps() {
@@ -172,9 +178,13 @@ function withJob(config) {
         var workDefinition = void 0;
 
         _this2.setState({ completed: false, data: null, error: null });
+        var _context2 = _this2.context,
+            store = _context2.store,
+            intl = _context2.intl;
+
 
         try {
-          workDefinition = work(props);
+          workDefinition = work(props, { store: store, intl: intl });
         } catch (error) {
           _this2.setState({ completed: true, error: error });
           // Ensures asyncBootstrap stops
