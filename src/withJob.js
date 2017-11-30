@@ -180,16 +180,25 @@ export default function withJob(config) {
 
       render() {
         const { data, error, completed } = this.state
+        const renderWrappedAsLoadingComponent =
+          isString(LoadingComponent) &&
+          LoadingComponent.toLowerCase() === 'self'
 
         if (error) {
           return ErrorComponent ? (
             <ErrorComponent {...this.props} error={error} />
           ) : null
         }
-        if (!completed) {
-          return LoadingComponent ? <LoadingComponent {...this.props} /> : null
+
+        if (completed || (!completed && renderWrappedAsLoadingComponent)) {
+          return <WrappedComponent {...this.props} jobResult={data} />
         }
-        return <WrappedComponent {...this.props} jobResult={data} />
+
+        if (!completed && LoadingComponent) {
+          return <LoadingComponent {...this.props} />
+        }
+
+        return null
       }
     }
 

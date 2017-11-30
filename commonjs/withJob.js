@@ -144,14 +144,21 @@ function withJob(config) {
               error = _state.error,
               completed = _state.completed;
 
+          var renderWrappedAsLoadingComponent = isString(LoadingComponent) && LoadingComponent.toLowerCase() === "self";
 
           if (error) {
             return ErrorComponent ? _react2.default.createElement(ErrorComponent, _extends({}, this.props, { error: error })) : null;
           }
-          if (!completed) {
-            return LoadingComponent ? _react2.default.createElement(LoadingComponent, this.props) : null;
+
+          if (completed || !completed && renderWrappedAsLoadingComponent) {
+            return _react2.default.createElement(WrappedComponent, _extends({}, this.props, { jobResult: data }));
           }
-          return _react2.default.createElement(WrappedComponent, _extends({}, this.props, { jobResult: data }));
+
+          if (!completed && LoadingComponent) {
+            return _react2.default.createElement(LoadingComponent, this.props);
+          }
+
+          return null;
         }
       }]);
 
