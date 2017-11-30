@@ -16,6 +16,7 @@ export default function withJob(config) {
     ErrorComponent,
     serverMode = 'resolve',
     shouldWorkAgain = neverWorkAgain,
+    onlyUseWrappedComponent,
   } = config
 
   if (typeof work !== 'function') {
@@ -180,9 +181,10 @@ export default function withJob(config) {
 
       render() {
         const { data, error, completed } = this.state
-        const renderWrappedAsLoadingComponent =
-          typeof LoadingComponent === 'string' &&
-          LoadingComponent.toLowerCase() === 'self'
+
+        if (onlyUseWrappedComponent) {
+          return <WrappedComponent {...this.props} jobState={this.state} />
+        }
 
         if (error) {
           return ErrorComponent ? (
@@ -190,15 +192,11 @@ export default function withJob(config) {
           ) : null
         }
 
-        if (completed || (!completed && renderWrappedAsLoadingComponent)) {
-          return <WrappedComponent {...this.props} jobResult={data} />
+        if (!completed) {
+          return LoadingComponent ? <LoadingComponent {...this.props} /> : null
         }
 
-        if (!completed && LoadingComponent) {
-          return <LoadingComponent {...this.props} />
-        }
-
-        return null
+        return <WrappedComponent {...this.props} jobResult={data} />
       }
     }
 

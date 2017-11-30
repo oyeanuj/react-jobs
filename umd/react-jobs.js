@@ -202,7 +202,8 @@ function withJob(config) {
       _config$serverMode = config.serverMode,
       serverMode = _config$serverMode === undefined ? 'resolve' : _config$serverMode,
       _config$shouldWorkAga = config.shouldWorkAgain,
-      shouldWorkAgain = _config$shouldWorkAga === undefined ? neverWorkAgain : _config$shouldWorkAga;
+      shouldWorkAgain = _config$shouldWorkAga === undefined ? neverWorkAgain : _config$shouldWorkAga,
+      onlyUseWrappedComponent = config.onlyUseWrappedComponent;
 
 
   if (typeof work !== 'function') {
@@ -300,21 +301,20 @@ function withJob(config) {
               error = _state.error,
               completed = _state.completed;
 
-          var renderWrappedAsLoadingComponent = typeof LoadingComponent === "string" && LoadingComponent.toLowerCase() === 'self';
+
+          if (onlyUseWrappedComponent) {
+            return _react2.default.createElement(WrappedComponent, _extends({}, this.props, { jobState: this.state }));
+          }
 
           if (error) {
             return ErrorComponent ? _react2.default.createElement(ErrorComponent, _extends({}, this.props, { error: error })) : null;
           }
 
-          if (completed || !completed && renderWrappedAsLoadingComponent) {
-            return _react2.default.createElement(WrappedComponent, _extends({}, this.props, { jobResult: data }));
+          if (!completed) {
+            return LoadingComponent ? _react2.default.createElement(LoadingComponent, this.props) : null;
           }
 
-          if (!completed && LoadingComponent) {
-            return _react2.default.createElement(LoadingComponent, this.props);
-          }
-
-          return null;
+          return _react2.default.createElement(WrappedComponent, _extends({}, this.props, { jobResult: data }));
         }
       }]);
 
