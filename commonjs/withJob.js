@@ -47,7 +47,8 @@ function withJob(config) {
       serverMode = _config$serverMode === undefined ? 'resolve' : _config$serverMode,
       _config$shouldWorkAga = config.shouldWorkAgain,
       shouldWorkAgain = _config$shouldWorkAga === undefined ? neverWorkAgain : _config$shouldWorkAga,
-      onlyUseWrappedComponent = config.onlyUseWrappedComponent;
+      _config$onlyUseWrappe = config.onlyUseWrappedComponent,
+      onlyUseWrappedComponent = _config$onlyUseWrappe === undefined ? false : _config$onlyUseWrappe;
 
 
   if (typeof work !== 'function') {

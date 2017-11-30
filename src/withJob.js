@@ -16,7 +16,7 @@ export default function withJob(config) {
     ErrorComponent,
     serverMode = 'resolve',
     shouldWorkAgain = neverWorkAgain,
-    onlyUseWrappedComponent,
+    onlyUseWrappedComponent = false,
   } = config
 
   if (typeof work !== 'function') {
