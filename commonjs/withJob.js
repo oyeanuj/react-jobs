@@ -144,7 +144,7 @@ function withJob(config) {
               error = _state.error,
               completed = _state.completed;
 
-          var renderWrappedAsLoadingComponent = isString(LoadingComponent) && LoadingComponent.toLowerCase() === "self";
+          var renderWrappedAsLoadingComponent = typeof LoadingComponent === "string" && LoadingComponent.toLowerCase() === 'self';
 
           if (error) {
             return ErrorComponent ? _react2.default.createElement(ErrorComponent, _extends({}, this.props, { error: error })) : null;

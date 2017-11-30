@@ -181,7 +181,7 @@ export default function withJob(config) {
       render() {
         const { data, error, completed } = this.state
         const renderWrappedAsLoadingComponent =
-          isString(LoadingComponent) &&
+          typeof LoadingComponent === 'string' &&
           LoadingComponent.toLowerCase() === 'self'
 
         if (error) {
