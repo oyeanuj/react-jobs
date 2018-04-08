@@ -206,9 +206,7 @@ function withJob(config) {
               return undefined;
             }
             _this2.setState({ completed: true, data: data });
-            if (_this2.context.jobs) {
-              _this2.context.jobs.register(id, { data: data });
-            }
+            _this2.setJobContext(data);
             // Ensures asyncBootstrap continues
             return true;
           }).catch(function (error) {
@@ -236,10 +234,17 @@ function withJob(config) {
         }
 
         // Synchronous result.
+        _this2.setJobContext(workDefinition);
         _this2.setState({ completed: true, data: workDefinition, error: null });
 
         // Ensures asyncBootstrap continues
         return true;
+      };
+
+      this.setJobContext = function (data) {
+        if (_this2.context.jobs) {
+          _this2.context.jobs.register(id, { data: data });
+        }
       };
 
       this.getJobState = function () {

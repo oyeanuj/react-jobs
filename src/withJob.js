@@ -136,9 +136,7 @@ export default function withJob(config) {
                 return undefined
               }
               this.setState({ completed: true, data })
-              if (this.context.jobs) {
-                this.context.jobs.register(id, { data })
-              }
+              this.setJobContext(data)
               // Ensures asyncBootstrap continues
               return true
             })
@@ -167,10 +165,17 @@ export default function withJob(config) {
         }
 
         // Synchronous result.
+        this.setJobContext(workDefinition)
         this.setState({ completed: true, data: workDefinition, error: null })
 
         // Ensures asyncBootstrap continues
         return true
+      }
+
+      setJobContext = data => {
+        if (this.context.jobs) {
+          this.context.jobs.register(id, { data })
+        }
       }
 
       getJobState = () => ({
