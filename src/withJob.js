@@ -58,7 +58,7 @@ export default function withJob(config) {
       }
 
       // @see react-async-bootstrapper
-      asyncBootstrap() {
+      bootstrap() {
         if (env === 'browser') {
           // No logic for browser, just continue
           return true
@@ -124,7 +124,7 @@ export default function withJob(config) {
           workDefinition = work(props, { store, intl })
         } catch (error) {
           this.setState({ completed: true, error })
-          // Ensures asyncBootstrap stops
+          // Ensures bootstrap stops
           return false
         }
 
@@ -137,7 +137,7 @@ export default function withJob(config) {
               }
               this.setState({ completed: true, data })
               this.setJobContext(data)
-              // Ensures asyncBootstrap continues
+              // Ensures bootstrap continues
               return true
             })
             .catch(error => {
@@ -159,16 +159,17 @@ export default function withJob(config) {
                 // eslint-disable-next-line no-console
                 console.warn(error)
               }
-              // Ensures asyncBootstrap stops
+              // Ensures bootstrap stops
               return false
             })
         }
 
         // Synchronous result.
         this.setJobContext(workDefinition)
+
         this.setState({ completed: true, data: workDefinition, error: null })
 
-        // Ensures asyncBootstrap continues
+        // Ensures bootstrap continues
         return true
       }
 
