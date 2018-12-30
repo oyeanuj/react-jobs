@@ -4405,11 +4405,11 @@ react-addons-test-utils@^15.6.0:
   version "15.6.2"
   resolved "https://registry.yarnpkg.com/react-addons-test-utils/-/react-addons-test-utils-15.6.2.tgz#c12b6efdc2247c10da7b8770d185080a7b047156"
 
-react-async-bootstrapper@^2.1.1:
+react-async-bootstrapper@oyeanuj/react-async-bootstrapper#upgraded-tree-walker:
   version "2.1.1"
-  resolved "https://registry.yarnpkg.com/react-async-bootstrapper/-/react-async-bootstrapper-2.1.1.tgz#8bc4115108e2ce6ba5771850a6814980599e09f2"
+  resolved "https://codeload.github.com/oyeanuj/react-async-bootstrapper/tar.gz/32b5e031a9f117096fc2a3b0efa44382a942742d"
   dependencies:
-    react-tree-walker "^4.2.0"
+    react-tree-walker oyeanuj/react-tree-walker#context-fixes-packaged
 
 react-dom@^16.4.2:
   version "16.4.2"
@@ -4450,9 +4450,9 @@ react-test-renderer@^16.4.2:
     prop-types "^15.6.0"
     react-is "^16.4.2"
 
-react-tree-walker@^4.2.0:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/react-tree-walker/-/react-tree-walker-4.2.0.tgz#bb2ac9b1219e1d39e5d11c5ecfa6fe5ea63f81c0"
+react-tree-walker@oyeanuj/react-tree-walker#context-fixes-packaged:
+  version "4.3.0"
+  resolved "https://codeload.github.com/oyeanuj/react-tree-walker/tar.gz/d046e37aa572ce2b7e73b18f3fd824f8cecccfd6"
 
 react@^16.4.2:
   version "16.4.2"
